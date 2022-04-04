@@ -1,3 +1,4 @@
+ENV['ENVIRONMENT'] = 'test'
 ENV['RACK_ENV'] = 'test'
 
 require File.join(File.dirname(__FILE__), '..', 'app.rb')
@@ -5,6 +6,7 @@ require File.join(File.dirname(__FILE__), '..', 'app.rb')
 require 'capybara'
 require 'capybara/rspec'
 require 'rspec'
+require_relative './setup_test_database'
 
 Capybara.app = BookmarkManager
 
@@ -39,6 +41,11 @@ RSpec.configure do |config|
     expectations.include_chain_clauses_in_custom_matcher_descriptions = true
   end
 
+  RSpec.configure do |config|
+    config.before(:each) do
+      setup_test_database
+    end
+  end
   # rspec-mocks config goes here. You can use an alternate test double
   # library (such as bogus or mocha) by changing the `mock_with` option here.
   config.mock_with :rspec do |mocks|
